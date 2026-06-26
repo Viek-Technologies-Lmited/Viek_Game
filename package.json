@@ -1,0 +1,18 @@
+{
+  "name": "viektech-play",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ViekPlay monorepo",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev -w @viekplay/web",
+    "dev:api": "npm run dev -w @viekplay/api",
+    "dev": "concurrently \"npm run dev:web\" \"npm run dev:api\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
