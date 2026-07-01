@@ -28,4 +28,27 @@ export class UsersService {
       data,
     });
   }
+
+  async update(id: string, data: Prisma.UserUpdateInput): Promise<User> {
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async getStats(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        totalScore: true,
+        gamesPlayed: true,
+        userAchievements: {
+          include: {
+            achievement: true,
+          },
+        },
+      },
+    });
+    return user;
+  }
 }
