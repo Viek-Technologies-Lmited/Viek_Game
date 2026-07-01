@@ -8,7 +8,7 @@ export default function HomePage() {
 
   const features = [
     {
-      icon: '🎯',
+      icon: '',
       title: 'Multiple Game Modes',
       desc: 'Choose from Rapid Fire, Timed Challenges, and more exciting quiz formats.',
     },
@@ -18,12 +18,12 @@ export default function HomePage() {
       desc: 'Compete with friends and players worldwide in real-time rankings.',
     },
     {
-      icon: '🤖',
+      icon: '',
       title: 'AI-Powered Questions',
       desc: 'Smart question generation adapted to your skill level and interests.',
     },
     {
-      icon: '🎨',
+      icon: '',
       title: 'Custom Categories',
       desc: 'Quizzes across Science, Tech, History, Arts, and many more topics.',
     },
@@ -90,9 +90,9 @@ export default function HomePage() {
               )}
             </div>
             <div className="mt-8 flex items-center gap-6 text-white/50 text-sm">
-              <span>⚡ Free to play</span>
-              <span>🏆 Real-time matches</span>
-              <span>🔒 Secure & fair</span>
+              <span> Free to play</span>
+              <span> Real-time matches</span>
+              <span> Secure & fair</span>
             </div>
           </div>
         </div>
