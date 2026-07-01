@@ -41,13 +41,32 @@ From the repository root:
 npm install
 ```
 
-### 2. Generate Prisma client (after schema changes)
+### 2. Environment Variables
+
+Create a `.env` file in `apps/api` by copying the example file:
+
+```bash
+cp apps/api/.env.example apps/api/.env
+```
+
+Make sure you have a PostgreSQL database running, and update the `DATABASE_URL` and `JWT_SECRET` in your `apps/api/.env` file.
+
+### 3. Database Setup
+
+Run the Prisma migrations to set up your database schema:
+
+```bash
+cd apps/api
+npx prisma migrate dev
+```
+
+### 4. Generate Prisma client (after schema changes)
 
 ```bash
 npm run prisma:generate -w @viekplay/api
 ```
 
-### 3. Run the API (development mode with hot-reload)
+### 5. Run the API (development mode with hot-reload)
 
 ```bash
 npm run dev:api
