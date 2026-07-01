@@ -20,7 +20,7 @@ export class PaymentsService {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new BadRequestException('User not found');
 
-    const reference = \`viek_\${Date.now()}_\${Math.floor(Math.random() * 1000)}\`;
+    const reference = `viek_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
 
     // 1. Record pending payment in DB
     const payment = await this.prisma.payment.create({
@@ -37,7 +37,7 @@ export class PaymentsService {
       const response = await fetch('https://api.paystack.co/transaction/initialize', {
         method: 'POST',
         headers: {
-          Authorization: \`Bearer \${this.paystackSecretKey}\`,
+          Authorization: `Bearer ${this.paystackSecretKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -66,7 +66,7 @@ export class PaymentsService {
         this.logger.warn('MOCKING PAYSTACK RESPONSE (No secret key)');
         return {
           paymentId: payment.id,
-          authorizationUrl: \`https://mock.paystack.com/checkout/\${reference}\`,
+          authorizationUrl: `https://mock.paystack.com/checkout/${reference}`,
           reference,
         };
       }
@@ -101,7 +101,7 @@ export class PaymentsService {
 
     // Verify amount matches (convert DB amount back to kobo or vice versa)
     if (payment.amount * 100 !== amountPaidInKobo) {
-      this.logger.warn(\`Amount mismatch for ref \${reference}\`);
+      this.logger.warn(`Amount mismatch for ref ${reference}`);
     }
 
     // Mark payment as success
@@ -121,6 +121,6 @@ export class PaymentsService {
       },
     });
 
-    this.logger.log(\`Payment \${reference} fulfilled\`);
+    this.logger.log(`Payment ${reference} fulfilled`);
   }
 }
