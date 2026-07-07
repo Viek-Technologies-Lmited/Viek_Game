@@ -2,18 +2,15 @@
 
 @import "tailwindcss";
 
-/* =======================================================
-   ROOT — light theme tokens
-======================================================= */
 :root {
-  --bg: #ffffff;
-  --bg-soft: #f5f8fc;
-  --navy: #0a1e3f;
-  --navy-soft: #1e3a5f;
-  --sky: #0091ff;
-  --sky-soft: #eaf5ff;
-  --line: #dbe6f2;
-  --muted: #5b6b81;
+  --bg-dark: #0b1120;
+  --bg-dark-soft: #0f172a;
+  --panel: #151f36;
+  --line: #253352;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
 }
 
 * {
@@ -27,8 +24,8 @@ html {
 }
 
 body {
-  background: var(--bg);
-  color: var(--navy);
+  background: var(--bg-dark);
+  color: var(--text);
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -46,100 +43,55 @@ img {
   user-select: none;
 }
 
-/* =======================================================
-   SCROLLBAR
-======================================================= */
 ::-webkit-scrollbar {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-soft);
+  background: var(--bg-dark-soft);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--sky);
+  background: var(--blue);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--navy);
+  background: var(--purple);
 }
 
 ::selection {
-  background: var(--sky);
+  background: var(--blue);
   color: white;
 }
 
-/* =======================================================
-   TICKET / STUB CARD — signature motif for this theme
-   A card with a notched edge like a torn admission ticket,
-   used for feature cards and the featured-game panel.
-======================================================= */
-.ticket {
-  position: relative;
-  background: white;
-  border: 1.5px solid var(--line);
-  border-radius: 4px;
+/* Game room background (used on /games/[id]) */
+.game-gradient {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  min-height: 100%;
 }
 
-.ticket::before,
-.ticket::after {
-  content: "";
-  position: absolute;
-  width: 22px;
-  height: 22px;
-  background: var(--bg);
-  border: 1.5px solid var(--line);
-  border-radius: 999px;
-  top: 50%;
-  transform: translateY(-50%);
+/* Reusable panel — replaces the old .ticket card */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
 }
 
-.ticket::before {
-  left: -12px;
+.panel-hover {
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.panel-hover:hover {
+  transform: translateY(-4px);
+  border-color: var(--blue);
 }
 
-.ticket::after {
-  right: -12px;
+.grid-backdrop {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at 30% 20%, black 30%, transparent 75%);
+  opacity: 0.4;
 }
 
-.ticket-notch-top::before,
-.ticket-notch-top::after {
-  top: -12px;
-  transform: none;
-}
-
-/* =======================================================
-   DASHED DIVIDER — used inside ticket cards
-======================================================= */
-.dashed-divider {
-  border-top: 1.5px dashed var(--line);
-}
-
-/* =======================================================
-   NUMBER TAG — used to number sections like a program guide
-======================================================= */
-.num-tag {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  color: var(--sky);
-}
-
-/* =======================================================
-   HOVER LIFT
-======================================================= */
-.lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-.lift:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 45px -18px rgba(10, 30, 63, 0.25);
-  border-color: var(--sky);
-}
-
-/* =======================================================
-   FLOATING ANIMATION (robot/controller)
-======================================================= */
 @keyframes float {
   0%   { transform: translateY(0px); }
   50%  { transform: translateY(-16px); }
@@ -149,62 +101,12 @@ img {
   animation: float 6s ease-in-out infinite;
 }
 
-@keyframes controllerFloat {
-  0%   { transform: translate(0, 0) rotate(0deg); }
-  25%  { transform: translate(-6px, -10px) rotate(-3deg); }
-  50%  { transform: translate(0, -14px) rotate(0deg); }
-  75%  { transform: translate(6px, -8px) rotate(3deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
-}
-.animate-controller {
-  animation: controllerFloat 7s ease-in-out infinite;
-}
-
-/* =======================================================
-   PRIMARY BUTTON
-======================================================= */
-.btn-primary {
-  background: var(--navy);
-  color: white;
-  transition: 0.3s;
-}
-.btn-primary:hover {
-  background: var(--sky);
-  transform: translateY(-2px);
-}
-
-.btn-outline {
-  background: transparent;
-  border: 1.5px solid var(--navy);
-  color: var(--navy);
-  transition: 0.3s;
-}
-.btn-outline:hover {
-  background: var(--navy);
-  color: white;
-  transform: translateY(-2px);
-}
-
-/* =======================================================
-   GRID BACKDROP — faint, light-mode grid
-======================================================= */
-.grid-backdrop {
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(circle at 30% 20%, black 30%, transparent 75%);
-}
-
-/* =======================================================
-   RESPONSIVE TYPE
-======================================================= */
 @media (max-width: 1024px) {
-  h1.hero-title { font-size: 58px !important; }
+  h1.hero-title { font-size: 52px !important; }
 }
 @media (max-width: 768px) {
-  h1.hero-title { font-size: 44px !important; }
+  h1.hero-title { font-size: 40px !important; }
 }
 @media (max-width: 640px) {
-  h1.hero-title { font-size: 36px !important; line-height: 1.1; }
+  h1.hero-title { font-size: 32px !important; line-height: 1.15; }
 }

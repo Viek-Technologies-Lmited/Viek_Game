@@ -95,11 +95,12 @@ model QuestionOption {
 }
 
 model GameMode {
-  id        String   @id @default(uuid())
-  name      String
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                     String   @id @default(uuid())
+  name                   String
+  slug                   String   @unique
+  timePerQuestionSeconds Int      @default(15)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
   sessions GameSession[]
 }
