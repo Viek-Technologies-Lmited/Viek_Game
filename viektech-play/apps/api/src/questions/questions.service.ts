@@ -1,7 +1,7 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { CreateQuestionDto } from './dto/create-question.dto';
+import { Injectable, BadRequestException } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateCategoryDto } from "./dto/create-category.dto";
+import { CreateQuestionDto } from "./dto/create-question.dto";
 
 @Injectable()
 export class QuestionsService {
@@ -20,7 +20,9 @@ export class QuestionsService {
   async createQuestion(createQuestionDto: CreateQuestionDto) {
     const correctOptions = createQuestionDto.options.filter((o) => o.isCorrect);
     if (correctOptions.length !== 1) {
-      throw new BadRequestException('A question must have exactly one correct option.');
+      throw new BadRequestException(
+        "A question must have exactly one correct option.",
+      );
     }
 
     return this.prisma.question.create({
@@ -57,18 +59,41 @@ export class QuestionsService {
   }
 
   async deleteCategory(id: string) {
-    return this.prisma.category.delete({
-      where: { id },
+    const questions = await this.prisma.question.findMany({
+      where: { categoryId: id },
+      select: { id: true },
     });
+    const questionIds = questions.map((q) => q.id);
+
+    if (questionIds.length > 0) {
+      await this.prisma.questionOption.deleteMany({
+        where: { questionId: { in: questionIds } },
+      });
+      await this.prisma.gameSessionAnswer.deleteMany({
+        where: { questionId: { in: questionIds } },
+      });
+      await this.prisma.gameSessionQuestion.deleteMany({
+        where: { questionId: { in: questionIds } },
+      });
+      await this.prisma.question.deleteMany({
+        where: { id: { in: questionIds } },
+      });
+    }
+
+    return this.prisma.category.delete({ where: { id } });
   }
 
   async updateQuestion(id: string, updateQuestionDto: any) {
     // If options are provided, we delete existing and recreate
     // A more robust approach would be to upsert, but recreate is simpler for now
     if (updateQuestionDto.options) {
-      const correctOptions = updateQuestionDto.options.filter((o) => o.isCorrect);
+      const correctOptions = updateQuestionDto.options.filter(
+        (o) => o.isCorrect,
+      );
       if (correctOptions.length !== 1) {
-        throw new BadRequestException('A question must have exactly one correct option.');
+        throw new BadRequestException(
+          "A question must have exactly one correct option.",
+        );
       }
 
       await this.prisma.questionOption.deleteMany({
@@ -95,9 +120,13 @@ export class QuestionsService {
   }
 
   async deleteQuestion(id: string) {
-    // Cascade deletion of options is not implicit in Prisma schema unless onDelete: Cascade is defined.
-    // Let's explicitly delete options first.
     await this.prisma.questionOption.deleteMany({
+      where: { questionId: id },
+    });
+    await this.prisma.gameSessionAnswer.deleteMany({
+      where: { questionId: id },
+    });
+    await this.prisma.gameSessionQuestion.deleteMany({
       where: { questionId: id },
     });
     return this.prisma.question.delete({

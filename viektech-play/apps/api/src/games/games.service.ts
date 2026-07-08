@@ -8,7 +8,7 @@ import { CreateGameModeDto } from "./dto/create-game-mode.dto";
 import { CreateGameSessionDto } from "./dto/create-game-session.dto";
 import { GatewayGateway } from "../gateway/gateway.gateway";
 
-const QUESTIONS_PER_GAME = 10; // adjust or make configurable later
+const QUESTIONS_PER_GAME = 20;
 
 @Injectable()
 export class GamesService {
@@ -25,6 +25,10 @@ export class GamesService {
 
   async getGameModes() {
     return this.prisma.gameMode.findMany();
+  }
+
+  async deleteGameMode(id: string) {
+    return this.prisma.gameMode.delete({ where: { id } });
   }
 
   async createGameSession(data: CreateGameSessionDto) {

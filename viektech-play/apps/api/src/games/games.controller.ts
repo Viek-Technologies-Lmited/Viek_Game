@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Delete,
   Body,
   Param,
   UseGuards,
@@ -29,6 +30,13 @@ export class GamesController {
   @Post("modes")
   createGameMode(@Body() createGameModeDto: CreateGameModeDto) {
     return this.gamesService.createGameMode(createGameModeDto);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Delete("modes/:id")
+  deleteGameMode(@Param("id") id: string) {
+    return this.gamesService.deleteGameMode(id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
