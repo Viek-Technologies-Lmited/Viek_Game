@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { authApi } from './api-client';
+import { authService } from '../services/auth.service';
 import type { UserProfile } from '@viekplay/shared-types';
 
 interface AuthContextType {
@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const storedToken = localStorage.getItem('viekplay_token');
     if (storedToken) {
       setToken(storedToken);
-      authApi.getMe(storedToken)
+      authService.getMe()
         .then(setUser)
         .catch(() => {
           localStorage.removeItem('viekplay_token');
@@ -39,14 +39,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
-    const res = await authApi.login({ email, password });
+    const res = await authService.login({ email, password });
     localStorage.setItem('viekplay_token', res.access_token);
     setToken(res.access_token);
     setUser(res.user);
   }, []);
 
   const register = useCallback(async (email: string, password: string, displayName: string) => {
-    const res = await authApi.register({ email, password, displayName });
+    const res = await authService.register({ email, password, displayName });
     localStorage.setItem('viekplay_token', res.access_token);
     setToken(res.access_token);
     setUser(res.user);
