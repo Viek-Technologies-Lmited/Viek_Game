@@ -41,8 +41,8 @@ export default function GameRoomPage() {
   // Join the game room
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push('/login');
-      return;
+      // router.push('/login');
+      // return;
     }
     if (!token || !user || !sessionId) return;
 

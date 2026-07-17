@@ -16,8 +16,8 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push('/login');
-      return;
+      // router.push('/login');
+      // return;
     }
     if (user) {
       setDisplayName(user.displayName);

@@ -19,8 +19,8 @@ export default function LeaderboardPage() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push('/login');
-      return;
+      // router.push('/login');
+      // return;
     }
     if (!token) return;
     loadData();

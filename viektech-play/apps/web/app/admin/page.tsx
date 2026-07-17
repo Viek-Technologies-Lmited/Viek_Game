@@ -78,8 +78,8 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (!authLoading && (!isAuthenticated || !isAdmin)) {
-      router.push("/");
-      return;
+      // router.push("/login");
+      // return;
     }
     if (!token) return;
     loadData();
