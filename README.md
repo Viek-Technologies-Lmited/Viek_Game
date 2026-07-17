@@ -1,10 +1,3 @@
-# Viek_Game
-## Richard's Stack
-- HTML
-- CSS
-- JavaScript
-- Currently learning: Next.js, Tailwind CSS
-
 ## Backend API & Monorepo Setup
 
 The backend code for this project is located in the `viektech-play` directory. 
