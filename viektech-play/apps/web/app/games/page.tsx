@@ -23,8 +23,8 @@ export default function GamesPage() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      // router.push("/login");
-      // return;
+      router.push("/login");
+      return;
     }
     if (!token) return;
     loadData();

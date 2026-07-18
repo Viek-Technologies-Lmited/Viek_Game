@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { lastSectionCards } from "../fakeJson";
 import Button from "../button";
@@ -36,9 +37,11 @@ const LastSection = () => {
 
         {/* CTA */}
         <div className="mt-16 text-center">
-          <Button className="rounded-full! bg-white px-10 py-4 text-lg font-semibold text-blue-800 transition hover:bg-blue-100! w-fit!">
-            Start Playing
-          </Button>
+          <Link href="/games">
+            <Button className="rounded-full! bg-white px-10 py-4 text-lg font-semibold text-blue-800 transition hover:bg-blue-100! w-fit!">
+              Start Playing
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

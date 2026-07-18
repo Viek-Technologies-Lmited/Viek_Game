@@ -24,7 +24,7 @@ const FirstSection = () => {
         </p>
 
         <div className="mt-10 flex items-center gap-4 sm:flex-row">
-          <Link href="/play">
+          <Link href="/games">
             <Button
               type="button"
               className="rounded-full bg-blue-800 px-8 py-3 text-white transition hover:bg-blue-900"

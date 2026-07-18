@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '../../lib/auth-context';
-import { leaderboardApi, organizationsApi } from '../../lib/api-client';
-import type { LeaderboardEntry, Organization } from '@viekplay/shared-types';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../lib/auth-context";
+import { leaderboardApi, organizationsApi } from "../../lib/api-client";
+import type { LeaderboardEntry, Organization } from "@viekplay/shared-types";
 
 export default function LeaderboardPage() {
   const router = useRouter();
@@ -12,15 +12,15 @@ export default function LeaderboardPage() {
 
   const [globalLeaders, setGlobalLeaders] = useState<LeaderboardEntry[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [selectedOrg, setSelectedOrg] = useState<string>('');
+  const [selectedOrg, setSelectedOrg] = useState<string>("");
   const [orgLeaders, setOrgLeaders] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      // router.push('/login');
-      // return;
+      router.push("/login");
+      return;
     }
     if (!token) return;
     loadData();
@@ -60,19 +60,27 @@ export default function LeaderboardPage() {
 
   const getRankStyle = (rank: number) => {
     switch (rank) {
-      case 1: return 'text-yellow-500';
-      case 2: return 'text-zinc-400';
-      case 3: return 'text-amber-700';
-      default: return 'text-zinc-500';
+      case 1:
+        return "text-yellow-500";
+      case 2:
+        return "text-zinc-400";
+      case 3:
+        return "text-amber-700";
+      default:
+        return "text-zinc-500";
     }
   };
 
   const getRankBg = (rank: number) => {
     switch (rank) {
-      case 1: return 'bg-yellow-500/20 border-yellow-500/30';
-      case 2: return 'bg-zinc-400/10 border-zinc-400/20';
-      case 3: return 'bg-amber-700/20 border-amber-700/30';
-      default: return 'bg-white/5 border-white/10';
+      case 1:
+        return "bg-yellow-500/20 border-yellow-500/30";
+      case 2:
+        return "bg-zinc-400/10 border-zinc-400/20";
+      case 3:
+        return "bg-amber-700/20 border-amber-700/30";
+      default:
+        return "bg-white/5 border-white/10";
     }
   };
 
@@ -118,7 +126,9 @@ export default function LeaderboardPage() {
           ) : globalLeaders.length === 0 ? (
             <div className="text-center py-12 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-700">
               <div className="text-4xl mb-3">🏆</div>
-              <p className="text-zinc-600 dark:text-zinc-400">No rankings yet</p>
+              <p className="text-zinc-600 dark:text-zinc-400">
+                No rankings yet
+              </p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -128,19 +138,27 @@ export default function LeaderboardPage() {
                   className={`flex items-center justify-between p-3 rounded-xl border ${getRankBg(i + 1)}`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${getRankStyle(i + 1)}`}>
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${getRankStyle(i + 1)}`}
+                    >
                       {i + 1}
                     </div>
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
-                      {entry.displayName?.charAt(0)?.toUpperCase() || '?'}
+                      {entry.displayName?.charAt(0)?.toUpperCase() || "?"}
                     </div>
                     <div>
-                      <div className="font-medium text-sm">{entry.displayName}</div>
-                      <div className="text-xs text-zinc-500">{entry.gamesPlayed} games</div>
+                      <div className="font-medium text-sm">
+                        {entry.displayName}
+                      </div>
+                      <div className="text-xs text-zinc-500">
+                        {entry.gamesPlayed} games
+                      </div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-yellow-400">{entry.score}</div>
+                    <div className="font-bold text-yellow-400">
+                      {entry.score}
+                    </div>
                     <div className="text-xs text-zinc-500">pts</div>
                   </div>
                 </div>
@@ -163,7 +181,9 @@ export default function LeaderboardPage() {
             >
               <option value="">Select an organization</option>
               {organizations.map((org) => (
-                <option key={org.id} value={org.id}>{org.name}</option>
+                <option key={org.id} value={org.id}>
+                  {org.name}
+                </option>
               ))}
             </select>
           </div>
@@ -190,19 +210,27 @@ export default function LeaderboardPage() {
                   className={`flex items-center justify-between p-3 rounded-xl border ${getRankBg(i + 1)}`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${getRankStyle(i + 1)}`}>
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${getRankStyle(i + 1)}`}
+                    >
                       {i + 1}
                     </div>
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
-                      {entry.displayName?.charAt(0)?.toUpperCase() || '?'}
+                      {entry.displayName?.charAt(0)?.toUpperCase() || "?"}
                     </div>
                     <div>
-                      <div className="font-medium text-sm">{entry.displayName}</div>
-                      <div className="text-xs text-zinc-500">{entry.gamesPlayed} games</div>
+                      <div className="font-medium text-sm">
+                        {entry.displayName}
+                      </div>
+                      <div className="text-xs text-zinc-500">
+                        {entry.gamesPlayed} games
+                      </div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-yellow-400">{entry.score}</div>
+                    <div className="font-bold text-yellow-400">
+                      {entry.score}
+                    </div>
                     <div className="text-xs text-zinc-500">pts</div>
                   </div>
                 </div>

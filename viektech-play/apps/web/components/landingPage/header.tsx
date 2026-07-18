@@ -11,9 +11,9 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { href: "/d", label: "Home" },
-    { href: "/dd", label: "Play" },
-    { href: "/ddd", label: "Leaderboard" },
+    { href: "/", label: "Home" },
+    { href: "/games", label: "Play" },
+    { href: "/leaderboard", label: "Leaderboard" },
   ];
 
   return (
@@ -51,19 +51,23 @@ const Header = () => {
 
         {/* Desktop Buttons */}
         <div className="hidden items-center gap-4 px-5 md:flex">
-          <Button
-            type="button"
-            className="rounded-full border border-blue-800 bg-transparent px-6 py-2 text-[12px] text-blue-800 transition hover:bg-blue-800 hover:text-white"
-          >
-            Login
-          </Button>
+          <Link href="/login">
+            <Button
+              type="button"
+              className="rounded-full border border-blue-800 bg-transparent px-6 py-2 text-[12px] text-blue-800 transition hover:bg-blue-800 hover:text-white"
+            >
+              Login
+            </Button>
+          </Link>
 
-          <Button
-            type="button"
-            className="rounded-full bg-blue-800 px-6 py-2 text-[12px] font-semibold text-white transition hover:bg-blue-900"
-          >
-            Sign Up
-          </Button>
+          <Link href="/register">
+            <Button
+              type="button"
+              className="rounded-full bg-blue-800 px-6 py-2 text-[12px] font-semibold text-white transition hover:bg-blue-900"
+            >
+              Sign Up
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -99,19 +103,23 @@ const Header = () => {
             })}
 
             <div className="mt-6 flex flex-col gap-3">
-              <Button
-                type="button"
-                className="rounded-full border border-blue-800 bg-transparent text-blue-800"
-              >
-                Login
-              </Button>
+              <Link href="/login" onClick={() => setIsOpen(false)}>
+                <Button
+                  type="button"
+                  className="rounded-full border border-blue-800 bg-transparent text-blue-800"
+                >
+                  Login
+                </Button>
+              </Link>
 
-              <Button
-                type="button"
-                className="rounded-full bg-blue-800 text-white"
-              >
-                Sign Up
-              </Button>
+              <Link href="/register" onClick={() => setIsOpen(false)}>
+                <Button
+                  type="button"
+                  className="rounded-full bg-blue-800 text-white"
+                >
+                  Sign Up
+                </Button>
+              </Link>
             </div>
           </nav>
         </div>

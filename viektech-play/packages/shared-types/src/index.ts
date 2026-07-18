@@ -91,6 +91,7 @@ export interface GameMode {
   id: string;
   name: string;
   slug: string;
+  timePerQuestionSeconds: number;
   createdAt: string;
   updatedAt: string;
 }

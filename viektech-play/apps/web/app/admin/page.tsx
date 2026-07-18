@@ -7,6 +7,7 @@ import { questionsApi, gamesApi, adminApi, usersApi } from "../lib/api-client";
 import type {
   DashboardStats,
   GameMode,
+  GameSession,
   Category,
   UserProfile,
 } from "@viekplay/shared-types";
@@ -53,9 +54,11 @@ export default function AdminPage() {
   const [gameModes, setGameModes] = useState<GameMode[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [questions, setQuestions] = useState<any[]>([]);
+  const [activeSessions, setActiveSessions] = useState<GameSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [startingGame, setStartingGame] = useState<string | null>(null);
 
   const [catPreset, setCatPreset] = useState(COMMON_CATEGORIES[0]);
   const [customCatName, setCustomCatName] = useState("");
@@ -78,8 +81,8 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (!authLoading && (!isAuthenticated || !isAdmin)) {
-      // router.push("/login");
-      // return;
+      router.push("/login");
+      return;
     }
     if (!token) return;
     loadData();
@@ -89,18 +92,21 @@ export default function AdminPage() {
     if (!token) return;
     setLoading(true);
     try {
-      const [statsData, usersData, modes, cats, qs] = await Promise.all([
-        adminApi.getStats(token).catch(() => null),
-        usersApi.getAll(token).catch(() => []),
-        gamesApi.getGameModes(token).catch(() => []),
-        questionsApi.getCategories(token).catch(() => []),
-        questionsApi.getAll(token).catch(() => []),
-      ]);
+      const [statsData, usersData, modes, cats, qs, sessions] =
+        await Promise.all([
+          adminApi.getStats(token).catch(() => null),
+          usersApi.getAll(token).catch(() => []),
+          gamesApi.getGameModes(token).catch(() => []),
+          questionsApi.getCategories(token).catch(() => []),
+          questionsApi.getAll(token).catch(() => []),
+          gamesApi.getActiveSessions(token).catch(() => []),
+        ]);
       setStats(statsData);
       setUsers(usersData || []);
       setGameModes(modes || []);
       setCategories(cats || []);
       setQuestions(qs || []);
+      setActiveSessions(sessions || []);
 
       setQCategoryId((prev) => {
         if (!cats || cats.length === 0) return "";
@@ -191,6 +197,21 @@ export default function AdminPage() {
       setError(
         err.message || "Could not delete — it may be in use by a game session",
       );
+    }
+  };
+
+  const handleStartGame = async (sessionId: string) => {
+    if (!token) return;
+    setStartingGame(sessionId);
+    setError("");
+    try {
+      await gamesApi.startSession(sessionId, token);
+      await loadData();
+      flashSuccess("Game started!");
+    } catch (err: any) {
+      setError(err.message || "Could not start game");
+    } finally {
+      setStartingGame(null);
     }
   };
 
@@ -491,7 +512,68 @@ export default function AdminPage() {
               </div>
             </div>
 
+            {/* Active Game Sessions */}
+            <div className="panel p-6 lg:col-span-2">
+              <h2
+                className="text-lg font-bold mb-1"
+                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+              >
+                Active Game Sessions
+              </h2>
+              <p className="text-xs text-slate-500 mb-4">
+                View pending sessions and start games
+              </p>
+
+              {activeSessions.length === 0 ? (
+                <p className="text-sm text-slate-500 text-center py-6">
+                  No active sessions yet
+                </p>
+              ) : (
+                <div className="space-y-2">
+                  {activeSessions.map((session) => (
+                    <div
+                      key={session.id}
+                      className="flex items-center justify-between px-4 py-3 rounded-xl bg-white/5"
+                    >
+                      <div className="flex-1">
+                        <div className="font-medium text-sm">
+                          {session.gameMode?.name || "Unknown Mode"} •
+                          <span
+                            className={`ml-2 text-xs font-semibold px-2 py-1 rounded-full ${
+                              session.status === "PENDING"
+                                ? "bg-yellow-500/20 text-yellow-300"
+                                : session.status === "IN_PROGRESS"
+                                  ? "bg-green-500/20 text-green-300"
+                                  : "bg-slate-500/20 text-slate-300"
+                            }`}
+                          >
+                            {session.status}
+                          </span>
+                        </div>
+                        <div className="text-xs text-slate-500 mt-1">
+                          {session.category?.name || "All Categories"} •{" "}
+                          {session.participants?.length || 0} players joined
+                        </div>
+                      </div>
+                      {session.status === "PENDING" && (
+                        <button
+                          onClick={() => handleStartGame(session.id)}
+                          disabled={startingGame === session.id}
+                          className="ml-4 px-4 py-2 rounded-lg bg-green-500/20 text-green-300 hover:bg-green-500/30 text-sm font-medium transition-colors disabled:opacity-50"
+                        >
+                          {startingGame === session.id
+                            ? "Starting..."
+                            : "Start"}
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Create Question — full width */}
+
             <div className="panel p-6 lg:col-span-2">
               <h2
                 className="text-lg font-bold mb-1"

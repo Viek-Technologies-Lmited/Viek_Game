@@ -1,23 +1,29 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '../lib/auth-context';
-import { usersApi } from '../lib/api-client';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../lib/auth-context";
+import { usersApi } from "../lib/api-client";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, token, isAuthenticated, isLoading: authLoading, logout } = useAuth();
-  const [displayName, setDisplayName] = useState(user?.displayName || '');
-  const [email, setEmail] = useState(user?.email || '');
+  const {
+    user,
+    token,
+    isAuthenticated,
+    isLoading: authLoading,
+    logout,
+  } = useAuth();
+  const [displayName, setDisplayName] = useState(user?.displayName || "");
+  const [email, setEmail] = useState(user?.email || "");
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      // router.push('/login');
-      // return;
+      router.push("/login");
+      return;
     }
     if (user) {
       setDisplayName(user.displayName);
@@ -28,14 +34,14 @@ export default function ProfilePage() {
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token || !user) return;
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
     setSaving(true);
     try {
       await usersApi.update(user.id, { displayName }, token);
-      setSuccess('Profile updated successfully!');
+      setSuccess("Profile updated successfully!");
     } catch (err: any) {
-      setError(err.message || 'Update failed');
+      setError(err.message || "Update failed");
     } finally {
       setSaving(false);
     }
@@ -63,7 +69,7 @@ export default function ProfilePage() {
         <div className="p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-xl font-bold text-white">
-              {user?.displayName?.charAt(0)?.toUpperCase() || 'U'}
+              {user?.displayName?.charAt(0)?.toUpperCase() || "U"}
             </div>
             <div>
               <h2 className="text-xl font-bold">{user?.displayName}</h2>
@@ -73,15 +79,21 @@ export default function ProfilePage() {
 
           <div className="grid grid-cols-3 gap-4 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-500">{user?.totalScore || 0}</div>
+              <div className="text-2xl font-bold text-blue-500">
+                {user?.totalScore || 0}
+              </div>
               <div className="text-xs text-zinc-500">Total Score</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-purple-500">{user?.gamesPlayed || 0}</div>
+              <div className="text-2xl font-bold text-purple-500">
+                {user?.gamesPlayed || 0}
+              </div>
               <div className="text-xs text-zinc-500">Games Played</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-500">{user?.role || 'PLAYER'}</div>
+              <div className="text-2xl font-bold text-green-500">
+                {user?.role || "PLAYER"}
+              </div>
               <div className="text-xs text-zinc-500">Role</div>
             </div>
           </div>
@@ -104,7 +116,9 @@ export default function ProfilePage() {
             )}
 
             <div>
-              <label className="block text-sm font-medium mb-1">Display Name</label>
+              <label className="block text-sm font-medium mb-1">
+                Display Name
+              </label>
               <input
                 type="text"
                 value={displayName}
@@ -121,7 +135,9 @@ export default function ProfilePage() {
                 disabled
                 className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 cursor-not-allowed text-zinc-500"
               />
-              <p className="text-xs text-zinc-500 mt-1">Email cannot be changed</p>
+              <p className="text-xs text-zinc-500 mt-1">
+                Email cannot be changed
+              </p>
             </div>
 
             <button
@@ -129,7 +145,7 @@ export default function ProfilePage() {
               disabled={saving}
               className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold hover:from-blue-600 hover:to-purple-700 transition-all disabled:opacity-50"
             >
-              {saving ? 'Saving...' : 'Save Changes'}
+              {saving ? "Saving..." : "Save Changes"}
             </button>
           </form>
         </div>
@@ -140,7 +156,8 @@ export default function ProfilePage() {
             Danger Zone
           </h2>
           <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
-            Once you delete your account, there is no going back. Please be certain.
+            Once you delete your account, there is no going back. Please be
+            certain.
           </p>
           <div className="flex gap-3">
             <button
@@ -152,11 +169,13 @@ export default function ProfilePage() {
             {token && user && (
               <button
                 onClick={async () => {
-                  if (confirm('Are you sure you want to delete your account?')) {
+                  if (
+                    confirm("Are you sure you want to delete your account?")
+                  ) {
                     try {
                       await usersApi.delete(user.id, token);
                       logout();
-                      router.push('/');
+                      router.push("/");
                     } catch (err: any) {
                       setError(err.message);
                     }

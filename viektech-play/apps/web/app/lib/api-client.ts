@@ -190,6 +190,12 @@ export const questionsApi = {
       { token },
     );
   },
+
+  deleteQuestion: (id: string, token: string) =>
+    apiFetch<{ message: string }>(`/questions/${id}`, {
+      method: "DELETE",
+      token,
+    }),
 };
 
 // ============ Games API ============
@@ -301,5 +307,19 @@ export const adminApi = {
     apiFetch<import("@viekplay/shared-types").DashboardStats>(
       "/admin/analytics",
       { token },
+    ),
+
+  updateUserRole: (
+    userId: string,
+    role: "PLAYER" | "ADMIN" | "ORG_OWNER",
+    token: string,
+  ) =>
+    apiFetch<import("@viekplay/shared-types").UserProfile>(
+      `/admin/users/${userId}/role`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ role }),
+        token,
+      },
     ),
 };
